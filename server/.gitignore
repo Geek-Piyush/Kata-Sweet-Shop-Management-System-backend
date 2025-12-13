@@ -1,2 +1,8 @@
 node_modules/
 .env
+uploads/profiles/*
+uploads/sweets/*
+!uploads/profiles/.gitkeep
+!uploads/sweets/.gitkeep
+coverage/
+*.log
