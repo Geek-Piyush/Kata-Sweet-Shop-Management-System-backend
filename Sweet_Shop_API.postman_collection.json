@@ -1,0 +1,274 @@
+{
+  "info": {
+    "name": "Sweet Shop API",
+    "description": "API Collection for Sweet Shop Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@sweetshop.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sweets",
+      "item": [
+        {
+          "name": "Get All Sweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/sweets",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "sweets"]
+            }
+          }
+        },
+        {
+          "name": "Get Sweets with Filters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/sweets?category=Indian&minPrice=5&maxPrice=15",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "sweets"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Indian"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "5"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "15"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Sweets",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/sweets/search?q=ladoo",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "sweets", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "ladoo"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Sweet (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ADMIN_TOKEN_HERE"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kaju Katli\",\n  \"category\": \"Indian\",\n  \"price\": 12,\n  \"quantity\": 40\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/sweets",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "sweets"]
+            }
+          }
+        },
+        {
+          "name": "Update Sweet (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ADMIN_TOKEN_HERE"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 15,\n  \"quantity\": 50\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/sweets/SWEET_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "sweets", "SWEET_ID_HERE"]
+            }
+          }
+        },
+        {
+          "name": "Delete Sweet (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ADMIN_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/sweets/SWEET_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "sweets", "SWEET_ID_HERE"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "item": [
+        {
+          "name": "Purchase Sweet",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_TOKEN_HERE"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/sweets/SWEET_ID_HERE/purchase",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "sweets", "SWEET_ID_HERE", "purchase"]
+            }
+          }
+        },
+        {
+          "name": "Restock Sweet (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ADMIN_TOKEN_HERE"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 10\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/sweets/SWEET_ID_HERE/restock",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "sweets", "SWEET_ID_HERE", "restock"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
