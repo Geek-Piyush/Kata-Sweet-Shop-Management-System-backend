@@ -191,8 +191,6 @@ backend/
 │   └── sweets/           # Sweet product images
 ├── tests/                # Jest tests
 ├── .env                  # Environment config
-├── IMPLEMENTATION_SUMMARY.md
-├── QUICK_REFERENCE.md
 └── package.json
 ```
 
