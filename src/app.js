@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
-
+app.use("/api/sweets", sweetsRoutes);
 // Health check
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
