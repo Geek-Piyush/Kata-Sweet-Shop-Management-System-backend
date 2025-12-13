@@ -1,4 +1,6 @@
 import Sweet from "../models/Sweet.js";
+import Purchase from "../models/Purchase.js";
+import { deleteCachePattern } from "../utils/cache.js";
 
 export const createSweet = async (req, res, next) => {
   try {
@@ -18,6 +20,9 @@ export const createSweet = async (req, res, next) => {
     }
 
     const sweet = await Sweet.create({ name, category, price, quantity });
+
+    // Invalidate cache
+    deleteCachePattern("cache_*");
 
     res.status(201).json({ sweet });
   } catch (error) {
@@ -103,6 +108,9 @@ export const updateSweet = async (req, res, next) => {
       return res.status(404).json({ error: "Sweet not found" });
     }
 
+    // Invalidate cache
+    deleteCachePattern("cache_*");
+
     res.status(200).json({ sweet });
   } catch (error) {
     next(error);
@@ -118,6 +126,9 @@ export const deleteSweet = async (req, res, next) => {
     if (!sweet) {
       return res.status(404).json({ error: "Sweet not found" });
     }
+
+    // Invalidate cache
+    deleteCachePattern("cache_*");
 
     res.status(204).send();
   } catch (error) {
@@ -150,6 +161,21 @@ export const purchaseSweet = async (req, res, next) => {
       return res.status(400).json({ error: "Insufficient stock" });
     }
 
+    // Log purchase transaction for analytics
+    await Purchase.create({
+      sweet: sweet._id,
+      sweetName: sweet.name,
+      category: sweet.category,
+      quantity: quantity,
+      pricePerUnit: sweet.price,
+      totalAmount: sweet.price * quantity,
+      user: req.user._id,
+      purchaseDate: new Date(),
+    });
+
+    // Invalidate cache
+    deleteCachePattern("cache_*");
+
     res.status(200).json({ sweet });
   } catch (error) {
     next(error);
@@ -174,6 +200,9 @@ export const restockSweet = async (req, res, next) => {
     if (!sweet) {
       return res.status(404).json({ error: "Sweet not found" });
     }
+
+    // Invalidate cache
+    deleteCachePattern("cache_*");
 
     res.status(200).json({ sweet });
   } catch (error) {

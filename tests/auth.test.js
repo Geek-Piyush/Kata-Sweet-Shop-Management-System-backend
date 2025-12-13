@@ -28,7 +28,7 @@ describe("Auth Tests", () => {
       const res = await request(app).post("/api/auth/register").send({
         name: "Test User",
         email: "test@example.com",
-        password: "123456",
+        password: "Test@1234",
       });
 
       expect(res.statusCode).toBe(201);
@@ -48,15 +48,15 @@ describe("Auth Tests", () => {
       expect(res.body.error).toBeDefined();
     });
 
-    test("should fail with short password", async () => {
+    test("should fail with weak password", async () => {
       const res = await request(app).post("/api/auth/register").send({
         name: "Test User",
         email: "test@example.com",
-        password: "12345",
+        password: "weak",
       });
 
       expect(res.statusCode).toBe(400);
-      expect(res.body.error).toContain("at least 6 characters");
+      expect(res.body.error).toContain("at least 8 characters");
     });
 
     test("should fail with duplicate email", async () => {
@@ -64,14 +64,14 @@ describe("Auth Tests", () => {
       await request(app).post("/api/auth/register").send({
         name: "Test User",
         email: "test@example.com",
-        password: "123456",
+        password: "Test@1234",
       });
 
       // Second registration with same email
       const res = await request(app).post("/api/auth/register").send({
         name: "Another User",
         email: "test@example.com",
-        password: "123456",
+        password: "Test@1234",
       });
 
       expect(res.statusCode).toBe(409);
@@ -85,14 +85,14 @@ describe("Auth Tests", () => {
       await request(app).post("/api/auth/register").send({
         name: "Test User",
         email: "test@example.com",
-        password: "123456",
+        password: "Test@1234",
       });
     });
 
     test("should login successfully and return a token", async () => {
       const res = await request(app).post("/api/auth/login").send({
         email: "test@example.com",
-        password: "123456",
+        password: "Test@1234",
       });
 
       expect(res.statusCode).toBe(200);

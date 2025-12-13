@@ -12,10 +12,16 @@ export const register = async (req, res, next) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ error: "Password must be at least 6 characters" });
+    // Password validation regex
+    // Must be at least 8 characters, contain uppercase, lowercase, number, and special character
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        error:
+          "Password must be at least 8 characters and contain uppercase, lowercase, number, and special character (@$!%*?&)",
+      });
     }
 
     // Check if user exists

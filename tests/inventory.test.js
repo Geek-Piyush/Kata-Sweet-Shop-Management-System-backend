@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import User from "../src/models/User.js";
 import Sweet from "../src/models/Sweet.js";
+import Purchase from "../src/models/Purchase.js";
 import { hashPassword } from "../src/utils/password.js";
 
 let mongo;
@@ -17,6 +18,7 @@ beforeAll(async () => {
 afterEach(async () => {
   await User.deleteMany({});
   await Sweet.deleteMany({});
+  await Purchase.deleteMany({});
 });
 
 afterAll(async () => {
@@ -34,12 +36,12 @@ describe("Inventory Tests", () => {
     const userRes = await request(app).post("/api/auth/register").send({
       name: "Test User",
       email: "test@example.com",
-      password: "123456",
+      password: "User@1234",
     });
     userToken = userRes.body.token;
 
     // Create admin user
-    const hashedPassword = await hashPassword("123456");
+    const hashedPassword = await hashPassword("Admin@123");
     await User.create({
       name: "Admin",
       email: "admin@example.com",
@@ -49,7 +51,7 @@ describe("Inventory Tests", () => {
 
     const adminRes = await request(app).post("/api/auth/login").send({
       email: "admin@example.com",
-      password: "123456",
+      password: "Admin@123",
     });
     adminToken = adminRes.body.token;
 
