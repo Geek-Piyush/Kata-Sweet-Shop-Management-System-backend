@@ -166,9 +166,7 @@ backend/
 │   │   ├── sweetsController.js    # CRUD + photo upload
 │   │   └── analyticsController.js # Analytics & reporting
 │   ├── models/           # MongoDB schemas
-│   │   ├── User.js                # User schema with profilePhoto
-│   │   ├── Sweet.js               # Sweet schema with photo
-│   │   └── Purchase.js            # Purchase tracking
+│   │   ├── User.js                # User schema with
 │   ├── routes/           # API endpoints
 │   │   ├── auth.js
 │   │   ├── sweets.js
