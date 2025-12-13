@@ -124,3 +124,59 @@ export const deleteSweet = async (req, res, next) => {
     next(error);
   }
 };
+
+export const purchaseSweet = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    if (!quantity || quantity < 1) {
+      return res.status(400).json({ error: "Quantity must be at least 1" });
+    }
+
+    // Use findOneAndUpdate with conditions to handle race conditions
+    const sweet = await Sweet.findOneAndUpdate(
+      { _id: id, quantity: { $gte: quantity } },
+      { $inc: { quantity: -quantity } },
+      { new: true }
+    );
+
+    if (!sweet) {
+      // Check if sweet exists
+      const existingSweet = await Sweet.findById(id);
+      if (!existingSweet) {
+        return res.status(404).json({ error: "Sweet not found" });
+      }
+      return res.status(400).json({ error: "Insufficient stock" });
+    }
+
+    res.status(200).json({ sweet });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const restockSweet = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    if (!quantity || quantity < 1) {
+      return res.status(400).json({ error: "Quantity must be at least 1" });
+    }
+
+    const sweet = await Sweet.findByIdAndUpdate(
+      id,
+      { $inc: { quantity: quantity } },
+      { new: true }
+    );
+
+    if (!sweet) {
+      return res.status(404).json({ error: "Sweet not found" });
+    }
+
+    res.status(200).json({ sweet });
+  } catch (error) {
+    next(error);
+  }
+};

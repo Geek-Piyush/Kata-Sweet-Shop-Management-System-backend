@@ -21,4 +21,8 @@ router.post("/", authMiddleware, adminMiddleware, createSweet);
 router.put("/:id", authMiddleware, adminMiddleware, updateSweet);
 router.delete("/:id", authMiddleware, adminMiddleware, deleteSweet);
 
+// Inventory routes
+router.post("/:id/purchase", authMiddleware, purchaseSweet);
+router.post("/:id/restock", authMiddleware, adminMiddleware, restockSweet);
+
 export default router;
