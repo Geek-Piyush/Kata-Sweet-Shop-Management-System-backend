@@ -1,14 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key-for-testing";
-
-export const verifyToken = (token) => {
-  try {
-    return jwt.verify(token, JWT_SECRET);
-  } catch (error) {
-    return null;
-  }
-};
+import { verifyToken } from "../utils/jwt.js";
 
 export const authMiddleware = async (req, res, next) => {
   try {

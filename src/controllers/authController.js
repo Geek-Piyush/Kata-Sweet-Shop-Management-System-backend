@@ -1,13 +1,7 @@
 import User from "../models/User.js";
 import { hashPassword, comparePassword } from "../utils/password.js";
 
-import jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key-for-testing";
-
-export const generateToken = (userId, role) => {
-  return jwt.sign({ id: userId, role }, JWT_SECRET, { expiresIn: "7d" });
-};
+import { generateToken } from "../utils/jwt.js";
 
 export const register = async (req, res, next) => {
   try {
