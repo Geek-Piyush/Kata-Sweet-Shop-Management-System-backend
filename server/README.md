@@ -606,24 +606,6 @@ The API returns consistent error formats:
 
 ## Deployment
 
-### MongoDB Atlas
-
-1. Create free cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Get connection string
-3. Update `.env`:
-   ```env
-   MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/sweet-shop
-   ```
-
-### Heroku
-
-```bash
-heroku create sweet-shop-api
-heroku config:set MONGODB_URI=<atlas-uri>
-heroku config:set JWT_SECRET=<secret>
-git push heroku main
-```
-
 ## My AI Usage
 
 I used AI tools to speed up development on this project:
