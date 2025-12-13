@@ -7,9 +7,11 @@ import {
   deleteSweet,
   purchaseSweet,
   restockSweet,
+  uploadSweetPhoto,
 } from "../controllers/sweetsController.js";
 import { authMiddleware, adminMiddleware } from "../middlewares/auth.js";
 import { cacheMiddleware } from "../middlewares/cache.js";
+import upload from "../utils/upload.js";
 
 const router = express.Router();
 
@@ -21,6 +23,15 @@ router.get("/search", authMiddleware, cacheMiddleware(180), searchSweets);
 router.post("/", authMiddleware, adminMiddleware, createSweet);
 router.put("/:id", authMiddleware, adminMiddleware, updateSweet);
 router.delete("/:id", authMiddleware, adminMiddleware, deleteSweet);
+
+// Photo upload route (admin only)
+router.post(
+  "/:id/photo",
+  authMiddleware,
+  adminMiddleware,
+  upload.single("photo"),
+  uploadSweetPhoto
+);
 
 // Inventory routes
 router.post("/:id/purchase", authMiddleware, purchaseSweet);

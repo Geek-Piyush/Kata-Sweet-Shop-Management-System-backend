@@ -24,6 +24,10 @@ const SweetSchema = new mongoose.Schema(
       min: [0, "Quantity cannot be negative"],
       default: 0,
     },
+    photo: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

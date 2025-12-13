@@ -1,6 +1,12 @@
 import Sweet from "../models/Sweet.js";
 import Purchase from "../models/Purchase.js";
 import { deleteCachePattern } from "../utils/cache.js";
+import { compressSweetImage, deleteImage } from "../utils/imageProcessor.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const createSweet = async (req, res, next) => {
   try {
@@ -206,6 +212,57 @@ export const restockSweet = async (req, res, next) => {
 
     res.status(200).json({ sweet });
   } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Upload or update sweet photo
+ */
+export const uploadSweetPhoto = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    // Compress and resize image to 512x512
+    await compressSweetImage(req.file.path);
+
+    // Get relative path for storage
+    const relativePath = `/uploads/sweets/${req.file.filename}`;
+
+    // Update sweet photo
+    const sweet = await Sweet.findById(id);
+
+    if (!sweet) {
+      deleteImage(req.file.path);
+      return res.status(404).json({ error: "Sweet not found" });
+    }
+
+    // Delete old photo if exists
+    if (sweet.photo) {
+      const oldPhotoPath = path.join(__dirname, "../../", sweet.photo);
+      deleteImage(oldPhotoPath);
+    }
+
+    sweet.photo = relativePath;
+    await sweet.save();
+
+    // Invalidate cache
+    deleteCachePattern("cache_*");
+
+    res.status(200).json({
+      message: "Sweet photo uploaded successfully",
+      photo: relativePath,
+      sweet,
+    });
+  } catch (error) {
+    // Clean up uploaded file on error
+    if (req.file) {
+      deleteImage(req.file.path);
+    }
     next(error);
   }
 };

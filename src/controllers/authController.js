@@ -1,7 +1,12 @@
 import User from "../models/User.js";
 import { hashPassword, comparePassword } from "../utils/password.js";
-
 import { generateToken } from "../utils/jwt.js";
+import { processProfilePhoto, deleteImage } from "../utils/imageProcessor.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const register = async (req, res, next) => {
   try {
@@ -87,9 +92,67 @@ export const login = async (req, res, next) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        profilePhoto: user.profilePhoto,
       },
       token,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Upload or update profile photo
+ */
+export const uploadProfilePhoto = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    // Process image (resize to 300x300)
+    await processProfilePhoto(req.file.path);
+
+    // Get relative path for storage
+    const relativePath = `/uploads/profiles/${req.file.filename}`;
+
+    // Update user profile
+    const user = await User.findById(req.user._id);
+
+    // Delete old profile photo if exists
+    if (user.profilePhoto) {
+      const oldPhotoPath = path.join(__dirname, "../../", user.profilePhoto);
+      deleteImage(oldPhotoPath);
+    }
+
+    user.profilePhoto = relativePath;
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile photo uploaded successfully",
+      profilePhoto: relativePath,
+    });
+  } catch (error) {
+    // Clean up uploaded file on error
+    if (req.file) {
+      deleteImage(req.file.path);
+    }
+    next(error);
+  }
+};
+
+/**
+ * Get current user profile
+ */
+export const getProfile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).select("-passwordHash");
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ user });
   } catch (error) {
     next(error);
   }
