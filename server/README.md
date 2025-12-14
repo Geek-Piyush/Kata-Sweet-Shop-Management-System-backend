@@ -606,6 +606,32 @@ The API returns consistent error formats:
 
 ## Deployment
 
+**Backend is deployed on Render:**
+
+- Production URL: https://kata-sweet-shop-management-system-backend.onrender.com/api
+- Health Check: https://kata-sweet-shop-management-system-backend.onrender.com/health
+
+**Environment Variables Required:**
+
+```env
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=your-secret-key
+NODE_ENV=production
+FRONTEND_URL=https://kata-sweet-shop-management-system-b.vercel.app
+FRONTEND_CUSTOM_DOMAIN=https://incubite.piyushnashikkar.dev
+```
+
+**Test the API:**
+
+```bash
+# Health check
+curl https://kata-sweet-shop-management-system-backend.onrender.com/health
+
+# Should return: {"status":"ok"}
+```
+
+**Deployment Details:**
+
 ## My AI Usage
 
 I used AI tools to speed up development on this project:

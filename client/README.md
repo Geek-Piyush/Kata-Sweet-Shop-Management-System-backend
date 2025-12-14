@@ -379,15 +379,41 @@ The build folder is ready for deployment to any static hosting service.
 
 ## Deployment (Vercel)
 
-_Deployment instructions will be added after initial deployment._
+### ✅ Successfully Deployed!
 
-Vercel is recommended for React apps because:
+**Live URLs:**
+
+- **Primary:** https://incubite.piyushnashikkar.dev
+- **Vercel:** https://kata-sweet-shop-management-system-b.vercel.app
+
+**Environment Variable Set:**
+
+```env
+REACT_APP_API_URL=https://kata-sweet-shop-management-system-backend.onrender.com/api
+```
+
+**Deployment Configuration:**
+
+- Framework: Create React App
+- Build Command: `npm run build`
+- Output Directory: `build`
+- Root Directory: `client`
+- Auto-deploy: Enabled (on push to main)
+
+**Custom Domain Setup:**
+
+1. Added `incubite.piyushnashikkar.dev` in Vercel
+2. Updated DNS records with CNAME pointing to Vercel
+3. SSL automatically provisioned by Vercel
+
+**Why Vercel?**
 
 - Zero configuration needed
 - Automatic HTTPS
 - Global CDN
 - Git integration
 - Environment variable support
+- Edge caching for optimal performance
 
 ---
 

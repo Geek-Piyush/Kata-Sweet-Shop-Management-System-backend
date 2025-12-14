@@ -16,8 +16,9 @@ I built this as a learning project to practice full-stack development, but it's 
 
 ## Live Demo
 
-- **Frontend:** _[Deployment URL - Coming Soon]_
-- **Backend API:** _[Deployment URL - Coming Soon]_
+- **Frontend:** https://incubite.piyushnashikkar.dev (or https://kata-sweet-shop-management-system-b.vercel.app)
+- **Backend API:** https://kata-sweet-shop-management-system-backend.onrender.com/api
+- **Health Check:** https://kata-sweet-shop-management-system-backend.onrender.com/health
 
 ---
 
@@ -372,7 +373,27 @@ Tests cover:
 
 ## Deployment
 
-_Instructions will be added after deployment to Render (backend) and Vercel (frontend)._
+### ✅ Successfully Deployed!
+
+**Backend (Render):**
+
+- URL: https://kata-sweet-shop-management-system-backend.onrender.com
+- Health Check: https://kata-sweet-shop-management-system-backend.onrender.com/health
+- Environment: Production
+- Database: MongoDB Atlas
+
+**Frontend (Vercel):**
+
+- Primary URL: https://incubite.piyushnashikkar.dev
+- Vercel URL: https://kata-sweet-shop-management-system-b.vercel.app
+- Auto-deploys on Git push to main branch
+
+**Environment Variables Set:**
+
+- Backend: `MONGODB_URI`, `JWT_SECRET`, `NODE_ENV`, `FRONTEND_URL`, `FRONTEND_CUSTOM_DOMAIN`
+- Frontend: `REACT_APP_API_URL`
+
+**For detailed deployment steps, see [DEPLOYMENT.md](DEPLOYMENT.md)**
 
 ---
 
