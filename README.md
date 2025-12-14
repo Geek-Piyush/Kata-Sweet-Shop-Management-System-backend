@@ -373,27 +373,41 @@ Tests cover:
 
 ## Deployment
 
-### ✅ Successfully Deployed!
+The application is deployed using modern cloud platforms for optimal performance and reliability.
 
 **Backend (Render):**
 
-- URL: https://kata-sweet-shop-management-system-backend.onrender.com
+- Production URL: https://kata-sweet-shop-management-system-backend.onrender.com
+- API Base: https://kata-sweet-shop-management-system-backend.onrender.com/api
 - Health Check: https://kata-sweet-shop-management-system-backend.onrender.com/health
 - Environment: Production
-- Database: MongoDB Atlas
+- Database: MongoDB Atlas (cloud-hosted)
+- Auto-deploys on Git push to main branch
+- Free tier includes 750 hours/month
 
 **Frontend (Vercel):**
 
-- Primary URL: https://incubite.piyushnashikkar.dev
+- Primary Domain: https://incubite.piyushnashikkar.dev (custom domain)
 - Vercel URL: https://kata-sweet-shop-management-system-b.vercel.app
+- Build: Optimized production build with code splitting
+- CDN: Global edge network for fast loading
+- SSL: Automatically provisioned for both domains
 - Auto-deploys on Git push to main branch
 
-**Environment Variables Set:**
+**Environment Variables Configured:**
 
-- Backend: `MONGODB_URI`, `JWT_SECRET`, `NODE_ENV`, `FRONTEND_URL`, `FRONTEND_CUSTOM_DOMAIN`
-- Frontend: `REACT_APP_API_URL`
+- Backend: `MONGODB_URI`, `JWT_SECRET`, `NODE_ENV=production`, `FRONTEND_URL`, `FRONTEND_CUSTOM_DOMAIN`
+- Frontend: `REACT_APP_API_URL` (points to Render backend)
 
-**For detailed deployment steps, see [DEPLOYMENT.md](DEPLOYMENT.md)**
+**Deployment Features:**
+
+- Continuous deployment from GitHub
+- Automatic HTTPS/SSL certificates
+- Environment-based configuration
+- Zero-downtime deployments
+- Easy rollback capabilities
+
+**Note:** Render's free tier spins down after 15 minutes of inactivity, which may cause a 30-60 second delay on the first request. The frontend on Vercel remains always available with instant loading.
 
 ---
 
