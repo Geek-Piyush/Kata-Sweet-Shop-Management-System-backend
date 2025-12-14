@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import sweetsService from "../services/sweets.service";
 import config from "../config";
 import "./AdminPanel.css";
@@ -77,19 +78,31 @@ const AdminPanel = () => {
         description: formData.description,
       };
 
-      const newSweet = await sweetsService.createSweet(sweetData);
+      const response = await sweetsService.createSweet(sweetData);
+      const newSweet = response.sweet; // Extract sweet from response
 
       // Upload photo if provided
-      if (photoFile) {
-        await sweetsService.uploadSweetPhoto(newSweet._id, photoFile);
+      if (photoFile && newSweet._id) {
+        try {
+          await sweetsService.uploadSweetPhoto(newSweet._id, photoFile);
+        } catch (photoErr) {
+          console.error("Photo upload failed:", photoErr);
+          alert(
+            "Sweet added but photo upload failed. You can edit to add photo later."
+          );
+        }
       }
 
-      alert("Sweet added successfully!");
+      if (!photoFile || newSweet._id) {
+        alert("Sweet added successfully!");
+      }
       resetForm();
       fetchSweets();
     } catch (err) {
       alert(err.response?.data?.message || "Failed to add sweet");
       console.error(err);
+      // Still refresh the list in case sweet was created
+      fetchSweets();
     } finally {
       setUploading(false);
     }
@@ -112,10 +125,17 @@ const AdminPanel = () => {
 
       // Upload photo if provided
       if (photoFile) {
-        await sweetsService.uploadSweetPhoto(editingSweet._id, photoFile);
+        try {
+          await sweetsService.uploadSweetPhoto(editingSweet._id, photoFile);
+        } catch (photoErr) {
+          console.error("Photo upload failed:", photoErr);
+          alert("Sweet updated but photo upload failed. Please try again.");
+        }
       }
 
-      alert("Sweet updated successfully!");
+      if (!photoFile) {
+        alert("Sweet updated successfully!");
+      }
       resetForm();
       fetchSweets();
     } catch (err) {
@@ -391,6 +411,7 @@ const AdminPanel = () => {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

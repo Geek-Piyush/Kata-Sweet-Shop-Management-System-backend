@@ -15,6 +15,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import analyticsService from "../services/analytics.service";
 import "./Analytics.css";
 
@@ -42,16 +43,22 @@ const Analytics = () => {
 
   useEffect(() => {
     fetchAnalytics();
+    // Refresh analytics every 30 seconds
+    const interval = setInterval(() => {
+      fetchAnalytics(true);
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = async (skipCache = false) => {
     try {
       setLoading(true);
       setError("");
 
       const [weekly, monthly] = await Promise.all([
-        analyticsService.getWeeklyAnalytics(),
-        analyticsService.getMonthlyAnalytics(),
+        analyticsService.getWeeklyAnalytics(skipCache),
+        analyticsService.getMonthlyAnalytics(skipCache),
       ]);
 
       setWeeklyData(weekly);
@@ -183,6 +190,26 @@ const Analytics = () => {
               onClick={() => setViewMode("custom")}
             >
               Custom Range
+            </button>
+            <button
+              className="btn-refresh"
+              onClick={() => fetchAnalytics(true)}
+              title="Refresh data"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+              </svg>
+              Refresh
             </button>
           </div>
 
@@ -330,6 +357,7 @@ const Analytics = () => {
           </>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

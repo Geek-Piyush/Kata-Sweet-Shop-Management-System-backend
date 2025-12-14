@@ -1,6 +1,7 @@
 .analytics-page {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #fff6e8;
+  padding-top: 90px;
 }
 
 .analytics-container {
@@ -27,13 +28,14 @@
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .view-selector button {
   padding: 10px 20px;
-  border: 2px solid #667eea;
+  border: 2px solid #2f4f3a;
   background: white;
-  color: #667eea;
+  color: #2f4f3a;
   border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
@@ -45,8 +47,28 @@
 }
 
 .view-selector button.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #df9b43;
   color: white;
+  border-color: #df9b43;
+}
+
+.btn-refresh {
+  margin-left: auto !important;
+  background: #2f4f3a !important;
+  color: white !important;
+  border-color: #2f4f3a !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.btn-refresh:hover {
+  background: #3d6449 !important;
+}
+
+.btn-refresh svg {
+  width: 16px;
+  height: 16px;
 }
 
 .custom-date-form {
@@ -65,7 +87,7 @@
 
 .custom-date-form input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #df9b43;
 }
 
 .stats-grid {
@@ -94,7 +116,7 @@
 .stat-value {
   font-size: 32px;
   font-weight: 700;
-  color: #667eea;
+  color: #df9b43;
   margin: 0;
 }
 

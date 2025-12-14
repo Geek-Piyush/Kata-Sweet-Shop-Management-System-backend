@@ -15,6 +15,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import AdminPanel from "./pages/AdminPanel";
 import Analytics from "./pages/Analytics";
+import Profile from "./pages/Profile";
 import "./App.css";
 
 function App() {
@@ -51,6 +52,15 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Checkout />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
                   </ProtectedRoute>
                 }
               />

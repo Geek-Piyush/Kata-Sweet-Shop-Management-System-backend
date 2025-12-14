@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #fff6e8;
   padding: 20px;
 }
 
@@ -53,7 +53,7 @@
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #df9b43;
 }
 
 .form-group input:disabled,
@@ -82,13 +82,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #df9b43;
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 20px rgba(223, 155, 67, 0.4);
+  background: #c98a35;
 }
 
 .btn-primary:disabled {
@@ -104,7 +105,7 @@
 }
 
 .auth-footer a {
-  color: #667eea;
+  color: #df9b43;
   text-decoration: none;
   font-weight: 600;
 }

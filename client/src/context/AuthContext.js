@@ -19,6 +19,10 @@ export const AuthProvider = ({ children }) => {
     setUser({
       userId: data.userId,
       role: data.role,
+      name: data.name,
+      email: data.email,
+      profilePhoto: data.profilePhoto,
+      createdAt: data.createdAt,
     });
     return data;
   };
@@ -28,6 +32,10 @@ export const AuthProvider = ({ children }) => {
     setUser({
       userId: data.userId,
       role: data.role,
+      name: data.name,
+      email: data.email,
+      profilePhoto: data.profilePhoto,
+      createdAt: data.createdAt,
     });
     return data;
   };
@@ -45,6 +53,20 @@ export const AuthProvider = ({ children }) => {
     return !!user && !!authService.getToken();
   };
 
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+    const storedUser = authService.getCurrentUser();
+    if (storedUser) {
+      localStorage.setItem(
+        "sweet_shop_user",
+        JSON.stringify({
+          ...storedUser,
+          ...updatedUser,
+        })
+      );
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -53,6 +75,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     isAdmin,
     isAuthenticated,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

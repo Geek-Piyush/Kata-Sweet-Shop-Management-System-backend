@@ -18,7 +18,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to={isAdmin() ? "/admin" : "/dashboard"} className="navbar-logo">
-          🧁 Sweet Shop
+          <img src="/Logo.png" alt="Incu-bite" className="navbar-logo-img" />
         </Link>
 
         <div className="navbar-menu">
@@ -46,6 +46,10 @@ const Navbar = () => {
               </Link>
             </>
           )}
+
+          <Link to="/profile" className="navbar-link">
+            Profile
+          </Link>
 
           <button onClick={handleLogout} className="btn-logout">
             Logout

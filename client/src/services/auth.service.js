@@ -10,6 +10,10 @@ const authService = {
         JSON.stringify({
           userId: response.data.userId,
           role: response.data.role,
+          name: response.data.name,
+          email: response.data.email,
+          profilePhoto: response.data.profilePhoto,
+          createdAt: response.data.createdAt,
         })
       );
     }
@@ -30,6 +34,10 @@ const authService = {
         JSON.stringify({
           userId: response.data.userId,
           role: response.data.role,
+          name: response.data.name,
+          email: response.data.email,
+          profilePhoto: response.data.profilePhoto,
+          createdAt: response.data.createdAt,
         })
       );
     }
@@ -58,6 +66,20 @@ const authService = {
   isAdmin: () => {
     const user = authService.getCurrentUser();
     return user?.role === "admin";
+  },
+
+  getProfile: async () => {
+    const response = await axios.get("/auth/profile");
+    return response.data;
+  },
+
+  uploadProfilePhoto: async (formData) => {
+    const response = await axios.post("/auth/profile/photo", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
   },
 };
 

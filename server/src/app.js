@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import authRoutes from "./routes/auth.js";
 import sweetsRoutes from "./routes/sweets.js";
 import analyticsRoutes from "./routes/analytics.js";
@@ -10,6 +11,29 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// CORS configuration - Allow requests from React frontend
+// For production, set FRONTEND_URL in .env to your deployed frontend URL (e.g., https://your-app.vercel.app)
+const allowedOrigins = [
+  "http://localhost:3000", // Development
+  process.env.FRONTEND_URL, // Production (Vercel, Netlify, etc.)
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 // Middleware
 app.use(express.json());

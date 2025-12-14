@@ -8,7 +8,6 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    role: "user",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,12 +28,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await register(
-        formData.name,
-        formData.email,
-        formData.password,
-        formData.role
-      );
+      await register(formData.name, formData.email, formData.password);
       // Redirect based on role
       if (isAdmin()) {
         navigate("/admin");
@@ -97,20 +91,6 @@ const Register = () => {
               disabled={loading}
               placeholder="Min 8 chars, 1 uppercase, 1 number, 1 special char"
             />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="role">Role</label>
-            <select
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              disabled={loading}
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
           </div>
 
           <button type="submit" className="btn btn-primary" disabled={loading}>

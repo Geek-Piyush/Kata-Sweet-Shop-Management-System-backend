@@ -5,10 +5,12 @@ class SimpleCache {
     this.cache = {};
   }
 
-  set(key, data) {
+  set(key, data, ttlSeconds = null) {
+    const ttl = ttlSeconds ? ttlSeconds * 1000 : config.CACHE_DURATION;
     this.cache[key] = {
       data,
       timestamp: Date.now(),
+      ttl,
     };
   }
 
@@ -17,7 +19,9 @@ class SimpleCache {
     if (!cached) return null;
 
     const age = Date.now() - cached.timestamp;
-    if (age > config.CACHE_DURATION) {
+    const maxAge = cached.ttl || config.CACHE_DURATION;
+
+    if (age > maxAge) {
       delete this.cache[key];
       return null;
     }
@@ -38,4 +42,5 @@ class SimpleCache {
   }
 }
 
-export default new SimpleCache();
+const cacheInstance = new SimpleCache();
+export default cacheInstance;

@@ -9,74 +9,65 @@ export const getWeeklyStats = async (req, res, next) => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
 
-    // Aggregate by category
-    const categoryStats = await Purchase.aggregate([
+    // Get all purchases in the period
+    const purchases = await Purchase.find({
+      purchaseDate: { $gte: weekAgo },
+    });
+
+    // Calculate totals
+    const totalRevenue = purchases.reduce((sum, p) => sum + p.totalAmount, 0);
+    const totalOrders = purchases.length;
+    const totalItemsSold = purchases.reduce((sum, p) => sum + p.quantity, 0);
+
+    // Revenue trend by date
+    const revenueTrend = await Purchase.aggregate([
+      { $match: { purchaseDate: { $gte: weekAgo } } },
       {
-        $match: {
-          purchaseDate: { $gte: weekAgo },
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$purchaseDate" },
+          },
+          revenue: { $sum: "$totalAmount" },
+          count: { $sum: 1 },
         },
       },
+      { $sort: { _id: 1 } },
+    ]);
+
+    // Revenue by category
+    const revenueByCategory = await Purchase.aggregate([
+      { $match: { purchaseDate: { $gte: weekAgo } } },
       {
         $group: {
           _id: "$category",
-          totalQuantity: { $sum: "$quantity" },
-          totalRevenue: { $sum: "$totalAmount" },
-          purchaseCount: { $sum: 1 },
+          revenue: { $sum: "$totalAmount" },
         },
       },
-      {
-        $project: {
-          _id: 0,
-          category: "$_id",
-          totalQuantity: 1,
-          totalRevenue: 1,
-          purchaseCount: 1,
-        },
-      },
-      {
-        $sort: { totalRevenue: -1 },
-      },
+      { $sort: { revenue: -1 } },
     ]);
 
-    // Aggregate by sweet
-    const sweetStats = await Purchase.aggregate([
-      {
-        $match: {
-          purchaseDate: { $gte: weekAgo },
-        },
-      },
+    // Best sellers
+    const bestSellers = await Purchase.aggregate([
+      { $match: { purchaseDate: { $gte: weekAgo } } },
       {
         $group: {
           _id: "$sweet",
-          sweetName: { $first: "$sweetName" },
-          category: { $first: "$category" },
-          totalQuantity: { $sum: "$quantity" },
-          totalRevenue: { $sum: "$totalAmount" },
-          purchaseCount: { $sum: 1 },
+          name: { $first: "$sweetName" },
+          totalSold: { $sum: "$quantity" },
+          revenue: { $sum: "$totalAmount" },
         },
       },
-      {
-        $project: {
-          _id: 0,
-          sweetId: "$_id",
-          sweetName: 1,
-          category: 1,
-          totalQuantity: 1,
-          totalRevenue: 1,
-          purchaseCount: 1,
-        },
-      },
-      {
-        $sort: { totalRevenue: -1 },
-      },
+      { $sort: { revenue: -1 } },
+      { $limit: 10 },
     ]);
 
     res.status(200).json({
-      period: "weekly",
-      startDate: weekAgo,
-      endDate: new Date(),
-      byCategory: categoryStats,
-      bySweet: sweetStats,
+      totalRevenue,
+      totalOrders,
+      totalItemsSold,
+      revenueTrend,
+      revenueByCategory,
+      bestSellers,
     });
   } catch (error) {
     next(error);
@@ -92,74 +83,65 @@ export const getMonthlyStats = async (req, res, next) => {
     const monthAgo = new Date();
     monthAgo.setDate(monthAgo.getDate() - 30);
 
-    // Aggregate by category
-    const categoryStats = await Purchase.aggregate([
+    // Get all purchases in the period
+    const purchases = await Purchase.find({
+      purchaseDate: { $gte: monthAgo },
+    });
+
+    // Calculate totals
+    const totalRevenue = purchases.reduce((sum, p) => sum + p.totalAmount, 0);
+    const totalOrders = purchases.length;
+    const totalItemsSold = purchases.reduce((sum, p) => sum + p.quantity, 0);
+
+    // Revenue trend by date
+    const revenueTrend = await Purchase.aggregate([
+      { $match: { purchaseDate: { $gte: monthAgo } } },
       {
-        $match: {
-          purchaseDate: { $gte: monthAgo },
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$purchaseDate" },
+          },
+          revenue: { $sum: "$totalAmount" },
+          count: { $sum: 1 },
         },
       },
+      { $sort: { _id: 1 } },
+    ]);
+
+    // Revenue by category
+    const revenueByCategory = await Purchase.aggregate([
+      { $match: { purchaseDate: { $gte: monthAgo } } },
       {
         $group: {
           _id: "$category",
-          totalQuantity: { $sum: "$quantity" },
-          totalRevenue: { $sum: "$totalAmount" },
-          purchaseCount: { $sum: 1 },
+          revenue: { $sum: "$totalAmount" },
         },
       },
-      {
-        $project: {
-          _id: 0,
-          category: "$_id",
-          totalQuantity: 1,
-          totalRevenue: 1,
-          purchaseCount: 1,
-        },
-      },
-      {
-        $sort: { totalRevenue: -1 },
-      },
+      { $sort: { revenue: -1 } },
     ]);
 
-    // Aggregate by sweet
-    const sweetStats = await Purchase.aggregate([
-      {
-        $match: {
-          purchaseDate: { $gte: monthAgo },
-        },
-      },
+    // Best sellers
+    const bestSellers = await Purchase.aggregate([
+      { $match: { purchaseDate: { $gte: monthAgo } } },
       {
         $group: {
           _id: "$sweet",
-          sweetName: { $first: "$sweetName" },
-          category: { $first: "$category" },
-          totalQuantity: { $sum: "$quantity" },
-          totalRevenue: { $sum: "$totalAmount" },
-          purchaseCount: { $sum: 1 },
+          name: { $first: "$sweetName" },
+          totalSold: { $sum: "$quantity" },
+          revenue: { $sum: "$totalAmount" },
         },
       },
-      {
-        $project: {
-          _id: 0,
-          sweetId: "$_id",
-          sweetName: 1,
-          category: 1,
-          totalQuantity: 1,
-          totalRevenue: 1,
-          purchaseCount: 1,
-        },
-      },
-      {
-        $sort: { totalRevenue: -1 },
-      },
+      { $sort: { revenue: -1 } },
+      { $limit: 10 },
     ]);
 
     res.status(200).json({
-      period: "monthly",
-      startDate: monthAgo,
-      endDate: new Date(),
-      byCategory: categoryStats,
-      bySweet: sweetStats,
+      totalRevenue,
+      totalOrders,
+      totalItemsSold,
+      revenueTrend,
+      revenueByCategory,
+      bestSellers,
     });
   } catch (error) {
     next(error);
@@ -181,6 +163,7 @@ export const getCustomRangeStats = async (req, res, next) => {
 
     const start = new Date(startDate);
     const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999); // Include the entire end date
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return res.status(400).json({ error: "Invalid date format" });
@@ -192,74 +175,65 @@ export const getCustomRangeStats = async (req, res, next) => {
         .json({ error: "startDate must be before endDate" });
     }
 
-    // Aggregate by category
-    const categoryStats = await Purchase.aggregate([
+    // Get all purchases in the period
+    const purchases = await Purchase.find({
+      purchaseDate: { $gte: start, $lte: end },
+    });
+
+    // Calculate totals
+    const totalRevenue = purchases.reduce((sum, p) => sum + p.totalAmount, 0);
+    const totalOrders = purchases.length;
+    const totalItemsSold = purchases.reduce((sum, p) => sum + p.quantity, 0);
+
+    // Revenue trend by date
+    const revenueTrend = await Purchase.aggregate([
+      { $match: { purchaseDate: { $gte: start, $lte: end } } },
       {
-        $match: {
-          purchaseDate: { $gte: start, $lte: end },
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$purchaseDate" },
+          },
+          revenue: { $sum: "$totalAmount" },
+          count: { $sum: 1 },
         },
       },
+      { $sort: { _id: 1 } },
+    ]);
+
+    // Revenue by category
+    const revenueByCategory = await Purchase.aggregate([
+      { $match: { purchaseDate: { $gte: start, $lte: end } } },
       {
         $group: {
           _id: "$category",
-          totalQuantity: { $sum: "$quantity" },
-          totalRevenue: { $sum: "$totalAmount" },
-          purchaseCount: { $sum: 1 },
+          revenue: { $sum: "$totalAmount" },
         },
       },
-      {
-        $project: {
-          _id: 0,
-          category: "$_id",
-          totalQuantity: 1,
-          totalRevenue: 1,
-          purchaseCount: 1,
-        },
-      },
-      {
-        $sort: { totalRevenue: -1 },
-      },
+      { $sort: { revenue: -1 } },
     ]);
 
-    // Aggregate by sweet
-    const sweetStats = await Purchase.aggregate([
-      {
-        $match: {
-          purchaseDate: { $gte: start, $lte: end },
-        },
-      },
+    // Best sellers
+    const bestSellers = await Purchase.aggregate([
+      { $match: { purchaseDate: { $gte: start, $lte: end } } },
       {
         $group: {
           _id: "$sweet",
-          sweetName: { $first: "$sweetName" },
-          category: { $first: "$category" },
-          totalQuantity: { $sum: "$quantity" },
-          totalRevenue: { $sum: "$totalAmount" },
-          purchaseCount: { $sum: 1 },
+          name: { $first: "$sweetName" },
+          totalSold: { $sum: "$quantity" },
+          revenue: { $sum: "$totalAmount" },
         },
       },
-      {
-        $project: {
-          _id: 0,
-          sweetId: "$_id",
-          sweetName: 1,
-          category: 1,
-          totalQuantity: 1,
-          totalRevenue: 1,
-          purchaseCount: 1,
-        },
-      },
-      {
-        $sort: { totalRevenue: -1 },
-      },
+      { $sort: { revenue: -1 } },
+      { $limit: 10 },
     ]);
 
     res.status(200).json({
-      period: "custom",
-      startDate: start,
-      endDate: end,
-      byCategory: categoryStats,
-      bySweet: sweetStats,
+      totalRevenue,
+      totalOrders,
+      totalItemsSold,
+      revenueTrend,
+      revenueByCategory,
+      bestSellers,
     });
   } catch (error) {
     next(error);
