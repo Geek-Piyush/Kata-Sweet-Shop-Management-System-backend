@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import AdminPanel from "./pages/AdminPanel";
+import Analytics from "./pages/Analytics";
 import "./App.css";
 
 function App() {
@@ -59,6 +60,15 @@ function App() {
                 element={
                   <ProtectedRoute adminOnly>
                     <AdminPanel />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/analytics"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <Analytics />
                   </ProtectedRoute>
                 }
               />
