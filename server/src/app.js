@@ -13,10 +13,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 // CORS configuration - Allow requests from React frontend
-// For production, set FRONTEND_URL in .env to your deployed frontend URL (e.g., https://your-app.vercel.app)
+// For production, set FRONTEND_URL and FRONTEND_CUSTOM_DOMAIN in .env
 const allowedOrigins = [
   "http://localhost:3000", // Development
-  process.env.FRONTEND_URL, // Production (Vercel, Netlify, etc.)
+  process.env.FRONTEND_URL, // Production Vercel URL
+  process.env.FRONTEND_CUSTOM_DOMAIN, // Custom domain (if any)
 ].filter(Boolean);
 
 app.use(
