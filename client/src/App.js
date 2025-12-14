@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import AdminPanel from "./pages/AdminPanel";
 import "./App.css";
 
 function App() {
@@ -57,7 +58,7 @@ function App() {
                 path="/admin"
                 element={
                   <ProtectedRoute adminOnly>
-                    <div>Admin Panel - Coming Soon</div>
+                    <AdminPanel />
                   </ProtectedRoute>
                 }
               />
